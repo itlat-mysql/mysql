@@ -1,0 +1,17 @@
+СПИСОК РЕПОЗИТОРИЕВ, КОТОРЫЕ СОДЕРЖАТ ПРИМЕРЫ ВЗАИМОДЕЙСТВИЯ ЯЗЫКОВ ПРОГРАММИРОВАНИЯ И MYSQL
+
+
+MySQL и Python:
+https://github.com/itlat-mysql/mysql-basics-python
+
+
+MySQL и PHP:
+https://github.com/itlat-mysql/mysql-basics-php
+
+
+MySQL и Java:
+https://github.com/itlat-mysql/mysql-basics-java
+
+
+MySQL и JavaScript:
+https://github.com/itlat-mysql/mysql-basics-javascript
