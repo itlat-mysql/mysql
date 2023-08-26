@@ -1,0 +1,94 @@
+{% extends 'layouts/admin.html' %}
+
+{% block content %}
+<form
+    action="{{ url_for('admin.products.update_product', product_id=product.id) }}"
+    method="POST">
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row d-flex align-items-center">
+                <div class="col-6">
+                    <h5 class="m-0">
+                        Update product
+                    </h5>
+                </div>
+                <div class="col-6 text-end">
+                    <a class="btn btn-primary" href="{{ url_for('admin.products.show_all_products') }}">Back to products</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <label for="title" class="col-lg-3 col-form-label text-md-end">
+                    Title
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-lg-6">
+                    <input
+                            id="title"
+                            type="text"
+                            class="form-control"
+                            name="title"
+                            value="{{ product.title }}"
+                            autocomplete="off"
+                            required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="description" class="col-lg-3 col-form-label text-md-end">
+                    Description
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-lg-6">
+                    <textarea
+                            id="description"
+                            class="form-control"
+                            name="description"
+                            autocomplete="off"
+                            required>{{ product.description }}</textarea>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="price" class="col-lg-3 col-form-label text-md-end">
+                    Price
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-lg-6">
+                    <input
+                            id="price"
+                            step=".01"
+                            type="number"
+                            value="{{ product.price }}"
+                            class="form-control"
+                            name="price"
+                            autocomplete="off"
+                            required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="category_id" class="col-lg-3 col-form-label text-md-end">
+                    Category
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-lg-6">
+                    <select
+                            id="category_id"
+                            class="form-control"
+                            name="category_id"
+                            autocomplete="off"
+                            required>
+                        {% for category in categories -%}
+                            <option value="{{ category.id }}" {%if product.category_id == category.id %}selected{% endif %}>{{ category.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

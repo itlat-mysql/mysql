@@ -1,0 +1,44 @@
+{% extends 'layouts/admin.html' %}
+
+{% block content %}
+<form
+    action="{{ url_for('admin.categories.create_category') }}"
+    method="POST">
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row d-flex align-items-center">
+                <div class="col-6">
+                    <h5 class="m-0">
+                        Create category
+                    </h5>
+                </div>
+                <div class="col-6 text-end">
+                    <a class="btn btn-primary" href="{{ url_for('admin.categories.show_all_categories') }}">Back to categories</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <label for="title" class="col-lg-3 col-form-label text-md-end">
+                    Title
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-lg-6">
+                    <input
+                            id="title"
+                            type="text"
+                            class="form-control"
+                            name="title"
+                            autocomplete="off"
+                            required>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

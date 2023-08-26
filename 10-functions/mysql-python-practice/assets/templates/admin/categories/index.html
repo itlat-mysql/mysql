@@ -1,0 +1,74 @@
+{% extends 'layouts/admin.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-6 d-flex align-items-center">
+                <h5 class="m-0">
+                    Categories
+                </h5>
+            </div>
+            <div class="col-6 text-end">
+                <a href="{{ url_for('admin.categories.create_category') }}" class="btn btn-primary">Create new category</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body table-responsive-md">
+        <table class="table table-bordered table-striped mb-0 bg-light" id="categories-container">
+            {% if categories %}
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>TITLE</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            {% endif %}
+            <tbody>
+                {% if categories %}
+                    {% for category in categories -%}
+                        <tr>
+                            <td class="align-middle">{{ category.id }}</td>
+                            <td class="align-middle">{{ category.title }}</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a
+                                        class="btn btn-primary btn-sm"
+                                        href="{{ url_for('admin.categories.update_category', category_id=category.id) }}">
+                                        Update
+                                    </a>
+                                    <button
+                                            type="button"
+                                            class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            data-bs-reference="parent">
+                                        <span class="visually-hidden">Toggle</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <form
+                                                action="{{ url_for('admin.categories.delete_category', category_id=category.id) }}"
+                                                method="POST">
+                                                <button class="dropdown-item">Delete</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="text-center">Categories are not available</div>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

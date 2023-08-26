@@ -1,0 +1,20 @@
+DROP DATABASE IF EXISTS python_shop;
+
+CREATE DATABASE python_shop DEFAULT CHARSET utf8mb4;
+
+USE python_shop;
+
+CREATE TABLE `categories` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `title` VARCHAR(255) DEFAULT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE `products` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `title` VARCHAR(255) DEFAULT NULL,
+  `description` TEXT,
+  `price` DECIMAL(20,2) DEFAULT NULL,
+  `category_id` BIGINT UNSIGNED NOT NULL,
+  FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
+  INDEX(`category_id`)
+) ENGINE=InnoDB;
