@@ -15,7 +15,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # установка секретного ключа (нужен для инициализации сессии)
-app.config['APP_SECRET_KEY'] = os.getenv('APP_SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY')
 
 # создание группы для страниц (можно назначать страницы без нее, но с ней удобнее)
 section = Blueprint('section', __name__)
