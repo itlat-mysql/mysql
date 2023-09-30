@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Chat</title>
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/style.css" rel="stylesheet">
+    </head>
+    <body class="bg-body-tertiary">
+        <div class="container p-1">
+
+            <!-- main application container (start) -->
+            <div id="app">
+                <div class="position-relative">
+                    <div id="app-wrapper" class="position-absolute" :class="{ loading: loading }"></div>
+
+                    <!-- application header (start) -->
+                    <div class="p-3 my-3 text-white bg-primary rounded shadow-sm">
+                        <div class="row">
+                            <div class="col-md-6 d-flex align-items-center">
+                                <div class="lh-1">
+                                    <h1 class="h6 text-white lh-1 text-uppercase mb-0">Chat</h1>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-end d-flex align-items-center justify-content-end">
+                                <div class="lh-1">
+                                    <h1 class="h6 text-white lh-1 mb-0">{{ username }}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- application header (end) -->
+
+                    <!-- messages presentation and submit area - show only if user is authenticated (start) -->
+                    <div v-if="authenticated">
+
+                        <!-- message submit area (start) -->
+                        <div class="my-3 p-3 bg-body rounded shadow-sm">
+                            <h6 class="border-bottom pb-2 mb-0">Add Message</h6>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <textarea class="form-control" v-model="messageContent"></textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12 text-end">
+                                    <button class="btn btn-primary" @click="submitMessage()">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- message submit area (end) -->
+
+                        <!-- messages presentation area (start) -->
+                        <div class="my-3 p-3 bg-body rounded shadow-sm">
+                            <h6 class="border-bottom pb-2 mb-0">Messages</h6>
+                            <div class="d-flex text-body-secondary pt-3" v-for="message in messages">
+                                <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
+                                     xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                                        <rect width="100%" height="100%" fill="#007bff"></rect>
+                                </svg>
+                                <p class="pb-3 mb-0 small lh-sm border-bottom">
+                                    <strong class="d-block text-gray-dark mb-1">
+                                        <small>{{ message.created_at }}</small> | {{ message.username }}
+                                    </strong>
+                                    {{ message.content }}
+                                </p>
+                            </div>
+                        </div>
+                        <!-- messages presentation area (end) -->
+
+                    </div>
+                    <!-- messages presentation and submit area (end) -->
+
+                    <!-- user registration and authentication area - show only if user is not authenticated (start) -->
+                    <div v-else>
+
+                        <!-- registration / authentication menu (start) -->
+                        <div class="my-3 p-3 bg-body rounded shadow-sm">
+                            <ul class="nav nav-pills nav-fill">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" @click.prevent :class="{ active: authMode === 'register' }"
+                                       @click="showRegistrationForm()">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" @click.prevent :class="{ active: authMode === 'login' }"
+                                       @click="showLoginForm()">Log in</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- registration / authentication menu (end) -->
+
+                        <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+                            <!-- registration form (start) -->
+                            <div v-if="authMode === 'register'">
+                                <div class="row mb-3 mt-3">
+                                    <label class="col-lg-3 col-form-label text-md-end">
+                                        Username
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control"
+                                               v-model="credentials.register.username" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-lg-3 col-form-label text-md-end">
+                                        Password
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <input type="password" class="form-control"
+                                               v-model="credentials.register.password" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <button class="btn btn-primary" @click="register()">
+                                            Register
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- registration form (end) -->
+
+                            <!-- authentication form (start) -->
+                            <div v-if="authMode === 'login'">
+                                <div class="row mb-3 mt-3">
+                                    <label class="col-lg-3 col-form-label text-md-end">
+                                        Username
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control"
+                                               v-model="credentials.login.username" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-lg-3 col-form-label text-md-end">
+                                        Password
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <input type="password" class="form-control"
+                                               v-model="credentials.login.password" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <button class="btn btn-primary" @click="login()">
+                                            Log in
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- authentication form (end) -->
+
+                        </div>
+                    </div>
+                    <!-- user registration and authentication area (end) -->
+
+                </div>
+
+                <!-- notifications container (start) -->
+                <div class="toast-container p-3 top-0 end-0" id="notifications-container">
+                    <!-- success notification (start) -->
+                    <div id="success-notification" class="toast">
+                        <div class="toast-header bg-success d-flex justify-content-end">
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="list-group-item" v-for="success in notifications.successes">
+                                    {{ success }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- success notification (end) -->
+
+                    <!-- error notification (start) -->
+                    <div id="error-notification" class="toast">
+                        <div class="toast-header bg-danger d-flex justify-content-end">
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            <ul class="list-unstyled mb-0">
+                                <li v-for="error in notifications.errors">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- error notification (end) -->
+
+                </div>
+                <!-- notifications container (end) -->
+
+            </div>
+            <!-- main application container (end) -->
+
+        </div>
+
+        <script src="/js/socket.io.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script type="module" src="/js/script.js"></script>
+    </body>
+</html>
+
+
+
